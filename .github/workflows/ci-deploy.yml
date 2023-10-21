@@ -33,7 +33,7 @@ jobs:
         if: steps.verify-changed-files.outputs.files_changed == 'true'
         run: |
           git config --local user.email "cedille@etsmtl.net"
-          git config --local user.name "svc-cedille-user"
+          git config --local user.name "pomme"
           git add .
           git commit -m "updating projects yaml files"
       - if : steps.verify-changed-files.outputs.files_changed == 'true'
@@ -153,3 +153,13 @@ jobs:
         
               - name: Image digest
                 run: echo ${{ steps.docker_build.outputs.digest }}
+  change-github-name:
+    name: Changing github head name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "cedille@etsmtl.net"
+          git config --local user.name "svc-cedille-user"
+          git add .
+          git commit -m "updating github name"

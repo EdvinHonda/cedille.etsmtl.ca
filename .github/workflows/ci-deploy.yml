@@ -157,7 +157,7 @@ jobs:
   change-github-name:
     name: Changing github head name
     runs-on: ubuntu-latest
-    needs: [build-and-tag-on-merge, build-on-release]
+    needs: build-and-tag-on-merge
     steps:
       - name: Commit and push changes
         run: |

@@ -1,0 +1,17 @@
+name: CI and Deploy with workflow calls
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*.*.*"
+
+jobs:
+  fetchProjects:
+    uses: ClubCedille/gh-workflows/.github/workflows/workflows-ci-fetch-projects.yml@master
+    secrets: inherit
+  build-and-deploy:
+    needs: fetchProjects
+    uses: ClubCedille/gh-workflows/.github/workflows/workflows-deployment.yml@master
+    secrets: inherit

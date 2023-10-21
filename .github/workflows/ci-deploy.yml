@@ -33,7 +33,7 @@ jobs:
         if: steps.verify-changed-files.outputs.files_changed == 'true'
         run: |
           git config --local user.email "cedille@etsmtl.net"
-          git config --local user.name "pomme"
+          git config --local user.name "svc-cedille-user"
           git add .
           git commit -m "updating projects yaml files"
       - if : steps.verify-changed-files.outputs.files_changed == 'true'
@@ -45,8 +45,9 @@ jobs:
           force: true
 
   build-and-tag-on-merge:
-    if: ${{ github.ref == 'refs/heads/master' && github.event.head_commit.committer.name != 'svc-cedille-user' }}
+    if: ${{ github.ref == 'refs/heads/master' }}
     environment : deployment
+    needs: fetchProjects
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -99,8 +100,9 @@ jobs:
                 run: echo ${{ steps.docker_build.outputs.digest }}
         
   build-on-release:
-    if: ${{ startsWith(github.ref, 'refs/tags/') && github.event.head_commit.committer.name != 'svc-cedille-user' }}
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
     environment : deployment
+    needs: fetchProjects
     runs-on: ubuntu-latest
     steps:
               - name: Check Out Repo
@@ -154,20 +156,3 @@ jobs:
         
               - name: Image digest
                 run: echo ${{ steps.docker_build.outputs.digest }}
-  change-github-name:
-    name: Changing github head name
-    runs-on: ubuntu-latest
-    needs: build-and-tag-on-merge
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: 'true'
-          token: ${{ secrets.PAT_TOKEN }}
-          
-      - name: Commit and push changes
-        run: |
-          git config --local user.email "cedille@etsmtl.net"
-          git config --local user.name "svc-cedille-user"
-          git add .
-          git commit -m "updating github name"

@@ -19,7 +19,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Fetch projects informations
-        run: make fetch-projects PAT_TOKEN=${{ secrets.PAT_TOKEN }}  
+        run: make fetch-projects GITHUB_SA='EdvinHonda' PAT_TOKEN=${{ secrets.PAT_TOKEN }}  
 
       - name: Verify Changed files
         uses: tj-actions/verify-changed-files@v13
